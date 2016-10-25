@@ -308,6 +308,7 @@ namespace
     doc->speech_settings.relative.pitch=check(env,env->CallDoubleMethod(params,SynthesisParameters_getPitch_method));
     doc->speech_settings.relative.volume=check(env,env->CallDoubleMethod(params,SynthesisParameters_getVolume_method));
     doc->set_owner(*this);
+    doc->prepare();
     doc->synthesize();
   }
 
