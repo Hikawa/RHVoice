@@ -71,6 +71,26 @@ namespace RHVoice
       return duration;
     }
 
+    double getRate() const {
+      return segment->has_feature("rate")?
+             segment->get("rate").as<double>(): 1.0;
+    }
+
+    double getPitch() const {
+      return segment->has_feature("pitch")?
+             segment->get("pitch").as<double>(): 1.0;
+    }
+
+    double getVolume() const {
+      return segment->has_feature("volume")?
+             segment->get("volume").as<double>(): 1.0;
+    }
+
+    double getTone() const {
+      return segment->has_feature("tone")?
+             segment->get("tone").as<double>(): 1.0;
+    }
+
   private:
     double calculate_speech_param(double absolute_change,double relative_change,double default_value,double min_value,double max_value) const;
 

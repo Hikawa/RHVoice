@@ -236,6 +236,8 @@ namespace RHVoice
       return const_cast<item&>(static_cast<const item&>(*this).last_child());
     }
 
+    bool operator == (const item& other) const { return data.get() == other.data.get(); }
+
   private:
     item* append_item(item* other);
     item* prepend_item(item* other);
