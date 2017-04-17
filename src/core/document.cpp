@@ -83,7 +83,8 @@ namespace RHVoice
     volume(1),
     length(0),
     language_and_voice(parent->get_engine().get_languages().end(),parent->get_engine().get_voices().end()),
-    num_tokens(0)
+    num_tokens(0),
+    utt(0)
     {
     }
 
@@ -361,35 +362,37 @@ namespace RHVoice
     return true;
   }
 
+  void document::prepare() {
+    sentence_position pos=sentence_position_initial;
+    for (iterator it(begin());it!=end();++it) {
+      if(!(it->has_text())) continue;
+      const_iterator tmp_it=it;
+      ++tmp_it;
+      if (tmp_it == end()) {
+        if (pos == sentence_position_initial)
+          pos = sentence_position_single;
+        else
+          pos = sentence_position_final;
+      }
+      delete it->utt;
+      it->utt = it->create_utterance(pos).release();
+      pos=sentence_position_middle;
+    }
+  }
+
   void document::synthesize()
   {
     if(!has_owner())
       return;
-    std::auto_ptr<utterance> u;
-    sentence_position pos=sentence_position_initial;
-    for(iterator it(begin());it!=end();++it)
-      {
-        if(!(it->has_text()))
-          {
-            if(it->notify_client())
-              continue;
-            else
-              break;
-          }
-        const_iterator tmp_it=it;
-        ++tmp_it;
-        if(tmp_it==end())
-          {
-            if(pos==sentence_position_initial)
-              pos=sentence_position_single;
-            else
-              pos=sentence_position_final;
-          }
-        u=it->create_utterance(pos);
-        if((u.get()!=0)&&(u->has_voice()))
-          if(!(u->get_voice().synthesize(*u,get_owner())))
-            break;
-        pos=sentence_position_middle;
+    for (iterator it(begin());it!=end();++it) {
+      if(!(it->utt)) {
+        if(it->notify_client()) continue;
+        else break;
       }
+      if(it->utt && (it->utt->has_voice())) {
+        if(!(it->utt->get_voice().synthesize(*it->utt, get_owner())))
+          break;
+      }
+    }
   }
 }

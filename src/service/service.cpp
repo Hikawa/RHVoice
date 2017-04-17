@@ -440,6 +440,7 @@ namespace
             doc->speech_settings.absolute.pitch=pitch;
             doc->speech_settings.absolute.volume=volume;
             doc->set_owner(*this);
+            doc->prepare();
             doc->synthesize();
           }
       }

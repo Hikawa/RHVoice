@@ -118,6 +118,7 @@ namespace RHVoice
           doc->verbosity_settings.punctuation_mode=msg.punctuation_mode;
           doc->verbosity_settings.capitals_mode=msg.capitals_mode;
           doc->set_owner(*this);
+          doc->prepare();
           doc->synthesize();
         }
       catch(const exception& e)

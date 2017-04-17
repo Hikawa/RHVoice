@@ -232,6 +232,15 @@ namespace RHVoice
 
   public:
     explicit sentence(document* parent_);
+    ~sentence() { delete utt; }
+    utterance* utt;
+
+    double getRate() const { return rate; }
+    void setRate(double v) { rate = v; }
+    double getPitch() const { return pitch; }
+    void setPitch(double v) { pitch = v; }
+    double getVolume() const { return volume; }
+    void setVolume(double v) { volume = v; }
 
     bool empty() const
     {
@@ -261,7 +270,7 @@ namespace RHVoice
     bool has_text() const;
     bool notify_client();
 
-  private:
+  //private:
     template<typename text_iterator>
     text_iterator skip_whitespace(text_iterator text_start,text_iterator text_end,const tts_markup& markup_info);
     template<typename text_iterator>
@@ -391,6 +400,7 @@ namespace RHVoice
       current_sentence=sentences.end();
     }
 
+    void prepare();
     void synthesize();
 
   private:

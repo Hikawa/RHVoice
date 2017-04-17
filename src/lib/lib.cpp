@@ -73,6 +73,7 @@ struct RHVoice_message_struct: public client
 
   void speak()
   {
+    doc_ptr->prepare();
     doc_ptr->synthesize();
   }
 

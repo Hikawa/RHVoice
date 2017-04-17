@@ -167,14 +167,21 @@ namespace RHVoice
       mlab.setSpeed(rate);
     mage->setLabel(mlab);
     mage->prepareModel();
+
+    double durs[MAGE::nOfStates];     
+    for (int i = 0; i < MAGE::nOfStates; ++i) durs[i] = lab.getRate();
+    mage->setDuration(durs, MAGE::scale);
+    mage->setVolume(lab.getVolume());
+
     mage->computeDuration();
+
     mage->computeParameters();
     mage->optimizeParameters();
   }
 
   void mage_hts_engine_impl::generate_samples(hts_label& lab)
   {
-    double pitch=lab.get_pitch();
+    double pitch=lab.get_pitch()*lab.getPitch();
     double mgc[MAGE::nOfMGCs];
     double* lpf=0;
     int nlpf=(MAGE::nOfLPFs-1)/2;
@@ -195,7 +202,7 @@ namespace RHVoice
         fq->pop();
         HTS106_Audio audio;
         audio.data=this;
-        HTS106_Vocoder_synthesize(vocoder.get(),MAGE::nOfMGCs-1,lf0,mgc,nlpf,lpf,MAGE::defaultAlpha,beta,1,0,&audio);
+        HTS106_Vocoder_synthesize(vocoder.get(),MAGE::nOfMGCs-1,lf0,mgc,nlpf,lpf,MAGE::defaultAlpha*lab.getTone(),beta,1,0,&audio);
       }
   }
 

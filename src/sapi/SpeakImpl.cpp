@@ -67,6 +67,7 @@ namespace RHVoice
 
     void SpeakImpl::operator()()
     {
+      doc.prepare();
       doc.synthesize();
     }
 

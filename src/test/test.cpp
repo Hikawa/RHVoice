@@ -124,6 +124,7 @@ int main(int argc,const char* argv[])
       else
         doc=document::create_from_plain_text(eng,text_start,text_end,content_text,profile);
       doc->set_owner(player);
+      doc->prepare();
       doc->synthesize();
       player.finish();
       return 0;
